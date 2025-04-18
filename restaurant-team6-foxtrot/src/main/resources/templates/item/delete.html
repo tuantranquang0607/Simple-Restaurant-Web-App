@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Delete Menu Item</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="container">
+    <h1>Confirm Delete Menu Item</h1>
+    <p>Are you sure you want to delete the following menu item?</p>
+
+    <div>
+        <strong>Name:</strong> <span th:text="${name}"></span>
+    </div>
+
+    <div>
+        <strong>Description:</strong> <span th:text="${description}"></span>
+    </div>
+
+    <form th:action="@{/menu/{menuId}/item/delete/{itemId}(menuId=${menu.id}, itemId=${menuItem.id})}" method="post">
+        <button type="submit" class="btn btn-danger">Yes, Delete</button> |
+        <a th:href="@{/menu/{id}(id=${menu.id})}">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

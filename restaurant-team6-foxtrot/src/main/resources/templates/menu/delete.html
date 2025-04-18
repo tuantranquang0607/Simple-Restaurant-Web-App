@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Create Product</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header>
+    <div th:insert="~{nav :: navbar}"></div>
+</header>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <h1>Confirm Delete Menu</h1>
+        <p>Are you sure you want to delete the following menu?</p>
+
+        <div>
+            <strong>Name:</strong> <span th:text="${menu.name}"></span>
+        </div>
+
+        <div>
+            <strong>Description:</strong> <span th:text="${menu.description}"></span>
+        </div>
+
+        <form th:action="@{/menu/delete/{id}(id=${menu.id})}" method="post">
+            <button type="submit" class="btn btn-danger">Yes, Delete</button> |
+            <a href="/menu">Cancel</a>
+        </form>
+    </main>
+</div>
+</body>
+</html>

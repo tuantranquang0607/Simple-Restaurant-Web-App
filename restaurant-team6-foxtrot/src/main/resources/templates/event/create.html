@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Create Product</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <div th:insert="~{nav :: navbar}"></div>
+</header>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="row">
+            <div class="col-md-4">
+                <form th:action="@{/event/create}" method="post" th:object="${event} ">
+                    <div class="form-group">
+                        <input type="hidden" th:field="*{id}" class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Layout:</label>
+                        <select th:field="*{layout}" class="form-control" required>
+                            <option value="" disabled selected>-- Select a Layout --</option>
+                            <option th:each="layout : ${layouts}" th:value="${layout.id}" th:text="${layout.name}"></option>
+                        </select>
+                        <p th:if="${#fields.hasErrors('layout')}" class="text-danger" th:errors="*{layout}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Name:
+                            <input th:field="*{name}" class="form-control"/>
+                        </label>
+                        <p th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Description:
+                            <input th:field="*{description}" class="form-control"/>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Starting Date:
+                            <input type="date" th:field="*{startDate}" class="form-control"/>
+                        </label>
+                        <p th:if="${#fields.hasErrors('startDate')}" class="text-danger" th:errors="*{startDate}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Ending Date:
+                            <input type="date" th:field="*{endDate}" class="form-control"/>
+                        </label>
+                        <p th:if="${#fields.hasErrors('endDate')}" class="text-danger" th:errors="*{endDate}"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Price:
+                            <input th:field="*{price}" class="form-control"/>
+                        </label>
+                        <p th:if="${#fields.hasErrors('price')}" class="text-danger" th:errors="*{price}"></p>
+                    </div>
+
+                    <div class="form-group"><input type="submit" value="Save" class="btn btn-primary"/></div>
+                </form>
+            </div>
+        </div>
+
+        <div><a th:href="@{/event}">Go Back</a></div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Layouts</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+<div class="container">
+  <main role="main" class="pb-3">
+    <a th:href="@{/layouts/create}">Create Layout</a>
+    <table class="table" th:unless="${layouts == null}" th:object="${layouts}">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Created Date</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="layout : ${layouts}">
+        <td><span th:text="${layout.name}"></span></td>
+        <td><span th:text="${layout.description}"></span></td>
+        <td><span th:text="${layout.createdDate}"></span></td>
+        <td>
+          <a th:href="@{/layouts/{id}(id=${layout.id})}">Details</a> |
+          <!--<a th:href="@{/layout/edit/{id}(id=${layout.id})}">Edit</a> |-->
+          <a th:href="@{/layouts/{id}/remove(id=${layout.id})}">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>

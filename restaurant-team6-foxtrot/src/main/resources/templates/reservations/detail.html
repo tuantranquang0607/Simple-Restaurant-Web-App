@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Layout Details</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+  <script th:src="@{/js/seating-time.js}" defer></script>
+</head>
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+
+<div class="container">
+  <main role="main" class="pb-3" th:object="${reservationRequest}">
+
+    <h1>Reservation Details</h1>
+    <div>
+      <h4 th:text="*{seatingTime.event.name}"></h4>
+      <hr/>
+
+      <dl class="row">
+
+
+        <dt class="col-sm-3">Guest Name:</dt>
+        <dd class="col-sm-9" th:text="*{fullName}"></dd>
+
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9" th:text="*{email}"></dd>
+
+
+        <dt class="col-sm-3">Seating Time:</dt>
+        <dd class="col-sm-9" th:text="*{seatingTime.formattedStartDateTime}"></dd>
+
+        <dt class="col-sm-3">Event Duration:</dt>
+        <dd class="col-sm-9" th:text="*{seatingTime.formattedDuration}"></dd>
+
+        <dt class="col-sm-3">Group Size:</dt>
+        <dd class="col-sm-9" th:text="*{groupSize}">Table 5</dd>
+
+        <dt class="col-sm-3">table number:</dt>
+        <dd class="col-sm-9" th:text="*{table.id}"></dd>
+        <dt class="col-sm-3">table Size:</dt>
+        <dd class="col-sm-9" th:text="*{table.seats}"></dd>
+
+
+      </dl>
+
+      <div class="mt-4">
+        <a th:href="@{/reservations}" class="btn btn-light">Back to Reservations</a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

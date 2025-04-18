@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Menu Detail</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<header>
+    <div th:insert="~{nav :: navbar}"></div>
+</header>
+
+<div class="container">
+    <h1>Menu Detail</h1>
+    <div>
+        <strong>Name:</strong>
+        <span th:text="${menu.name}"></span>
+    </div>
+    <div>
+        <strong>Description:</strong>
+        <span th:text="${menu.description}"></span>
+    </div>
+
+    <h2>Menu Items</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${menu.items}">
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.description}"></td>
+            <td>
+                <a th:href="@{/menu/{menuId}/item/edit/{itemId}(menuId=${menu.id}, itemId=${item.id})}">Edit</a> |
+                <a th:href="@{/menu/{menuId}/item/delete/{itemId}(menuId=${menu.id}, itemId=${item.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Add a New Item</h2>
+    <form th:action="@{/menu/{id}/item(id=${menu.id})}" method="post" th:object="${menuItem}">
+        <div class="form-group mb-3">
+            <label for="itemName">Name:</label>
+            <input type="text" class="form-control" id="itemName" th:field="*{name}" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="itemDescription">Description:</label>
+            <textarea class="form-control" id="itemDescription" th:field="*{description}"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Item</button> |
+        <a th:href="@{/menu}">Back to Menu</a>
+    </form>
+</div>
+</body>
+</html>

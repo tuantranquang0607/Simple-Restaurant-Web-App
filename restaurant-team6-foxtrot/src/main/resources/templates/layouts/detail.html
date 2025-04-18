@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Layout Details</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+  <script th:src="@{/js/seating-time.js}" defer></script>
+</head>
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+
+<div class="container">
+  <main role="main" class="pb-3" th:object="${diningTable}">
+
+    <h1>Layout Details</h1>
+    <div>
+      <h4>Layout</h4>
+      <hr/>
+      <div class="d-flex justify-content-between">
+        <a th:href="@{/layouts/{id}/edit(id=${layout.id})}">Edit Layout</a>
+        <form th:action="@{/layouts/{layoutId}/remove(layoutId=${layout.id})}" class method="get">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+
+      <hr/>
+
+      <dl class="row" th:object="${layout}">
+
+        <dt class="col-sm-2">Name</dt>
+        <dd class="col-sm-10">
+          <span th:text="*{name}"></span>
+        </dd>
+
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">
+          <span th:text="*{description}"></span>
+        </dd>
+
+        <dt class="col-sm-2">Created Date:</dt>
+        <dd class="col-sm-10">
+          <span th:text="*{createdDate}"></span>
+        </dd>
+
+        <dt class="col-sm-2">Last Updated:</dt>
+        <dd class="col-sm-10">
+          <span th:text="*{formattedUpdatedAt}"></span>
+        </dd>
+
+
+      </dl>
+
+      <h3>Dining Tables</h3>
+
+      <hr/>
+      <h4>Create Table</h4>
+      <form th:action="@{/layouts/{id}/create(id=${layout.id})}" method="post" class="d-flex align-items-center gap-3 justify-content-start">
+
+        <input type="hidden" th:field="*{layout}" th:value="${layout}" />
+        <input type="hidden" th:field="${diningTable.id}" />
+
+
+        <div class="d-flex align-items-center gap-2">
+          <label for="seats" class="control-label mb-0">Number of Seats:</label>
+          <div class="form-group mb-0">
+
+            <input type="number" id="seats" th:field="*{seats}" class="form-control" min="1" style="width: 80px;"/>
+          </div>
+
+
+          <div class="alert alert-warning mb-0" th:errors="*{seats}"></div>
+        </div>
+
+
+        <div class="form-group">
+          <input type="submit" value="Create" class="btn btn-primary"/>
+        </div>
+
+      </form>
+      <hr/>
+      <div class="container mt-4">
+        <div class="row g-2">
+
+          <div class="col-md-3" th:each="table : ${diningTables}">
+            <div class="card border rounded bg-light">
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <span>Seats: <strong th:text="${table.seats}"></strong></span>
+                <form th:action="@{/layouts/{layoutId}/remove/{id}(id=${table.id}, layoutId=${layout.id})}" method="post">
+                  <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <a th:href="@{/layouts}">Go Back</a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

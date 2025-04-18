@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Register</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body>
+<header>
+    <div th:insert="nav :: navbar"></div>
+</header>
+
+<div class="container" style="max-width: 400px;">
+    <h1 class="mt-4">Register</h1>
+
+    <form th:action="@{/register}" method="post" th:object="${userDetail}">
+        <div class="form-group mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" th:field="*{username}" class="form-control" id="username" required/>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="passwordField" class="form-label">Password:</label>
+            <div class="input-group">
+                <input type="password" th:field="*{password}" class="form-control" id="passwordField" required/>
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                    <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" th:field="*{email}" class="form-control" id="email" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="firstName" class="form-label">First Name:</label>
+            <input type="text" th:field="*{firstName}" class="form-control" id="firstName"/>
+        </div>
+
+        <div class="form-group mb-4">
+            <label for="lastName" class="form-label">Last Name:</label>
+            <input type="text" th:field="*{lastName}" class="form-control" id="lastName"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a th:href="@{/login}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+    function togglePassword()
+    {
+        var passwordField = document.getElementById("passwordField");
+        var toggleIcon = document.getElementById("togglePasswordIcon");
+
+        if (passwordField.type === "password")
+        {
+            passwordField.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        }
+        else
+        {
+            passwordField.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+.delete-btn {
+    display: none;
+
+}
+.btn-container {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-self: center;
+    gap: 10px;
+    margin: auto;
+}
+
+.delete:hover {
+    cursor: pointer;
+}
+.btn {
+    font-size: 0.875rem;
+    border-radius: 20px;
+}
+.delete-btn form{
+    width: fit-content;
+}
+
+
+
+
+.delete-btn:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title>My reservation</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+  <link th:href="@{/css/reservation.css}" rel="stylesheet"/>
+  <script th:src="@{/js/create-reservation.js}"></script>
+</head>
+<body>
+<header>
+  <div th:insert="~{nav :: navbar}"></div>
+</header>
+<div class="container">
+  <main role="main" class="pb-3">
+    <h1 class="mb-5">Reservations</h1>
+
+
+
+
+      <input type="hidden" name="view" th:value="${view}" />
+    <div class="container my-3 mt-5 filter-controls">
+      <div class="row g-2 align-items-center">
+
+        <div class="col-auto">
+          <form method="get">
+            <button type="submit" name="view" value="requests"
+                    class="btn"
+                    th:classappend="${view == 'requests'} ? 'btn-light' : 'btn-outline-secondary'">
+              Reservation Requests
+            </button>
+          </form>
+        </div>
+
+        <!-- Filter Selects -->
+        <div class="col">
+          <form method="get" class="row g-2 align-items-center">
+            <input type="hidden" name="view" th:value="${view}" />
+
+            <div class="col-md-4">
+              <select class="form-select select-gray px-2" name="eventId">
+                <option value="all" th:selected="${selectedEvent == 'all'}">All Events</option>
+                <option th:each="event : ${events}"
+                        th:value="${event.id}"
+                        th:text="${event.name}"
+                        th:selected="${selectedEvent == event.id.toString()}">
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <select class="form-select select-gray px-2" name="status">
+                <option value="all" th:selected="${selectedStatus == 'all'}">All Statuses</option>
+                <option value="PENDING" th:selected="${selectedStatus == 'PENDING'}">Pending</option>
+                <option value="APPROVED" th:selected="${selectedStatus == 'APPROVED'}">Approved</option>
+                <option value="REJECTED" th:selected="${selectedStatus == 'REJECTED'}">Rejected</option>
+              </select>
+            </div>
+
+            <div class="col-auto">
+              <button type="submit" class="btn btn-success px-5">Filter</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <table class="table" th:unless="${reservations == null}" th:object="${reservations}">
+        <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Starts</th>
+          <th>Till </th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reservation : ${reservations}">
+          <td><span th:text="${reservation.seatingTime.event.name}"></span></td>
+          <td><span th:text="${reservation.seatingTime.formattedStartDateTime}"></span></td>
+          <td><span th:text="${reservation.seatingTime.formattedEndDateTime}"></span></td>
+          <td>
+                <span th:if="${view == 'reservations'}">
+                  <span th:text="${reservation.status}"></span>
+                </span>
+
+                        <span th:if="${view == 'requests'}">
+                  <div th:if="${reservation.status != 'APPROVED'}">
+
+                    <div class="btn-group" th:id="'status-buttons-' + ${reservation.id}" th:attr="data-current-status=${reservation.status}">
+                      <button type="button"
+                              class="btn btn-sm rounded-pill"
+                              th:classappend="${reservation.status == T(nbcc.restaurantteam6foxtrot.entities.ReservationStatus).PENDING} ? 'btn-light' : 'btn-outline-secondary'"
+                              th:attr="data-id=${reservation.id}"
+                              onclick="showStatusConfirmation(event, this.getAttribute('data-id'), 'PENDING')">Pending</button>
+
+                      <button type="button"
+                              class="btn btn-sm rounded-pill"
+                              th:classappend="${reservation.status == T(nbcc.restaurantteam6foxtrot.entities.ReservationStatus).APPROVED} ? 'btn-primary' : 'btn-outline-secondary'"
+                              th:attr="data-id=${reservation.id}"
+                              onclick="showStatusConfirmation(event, this.getAttribute('data-id'), 'APPROVED')">Approve</button>
+
+                      <button type="button"
+                              class="btn btn-sm rounded-pill"
+                              th:classappend="${reservation.status == T(nbcc.restaurantteam6foxtrot.entities.ReservationStatus).REJECTED} ? 'btn-danger' : 'btn-outline-secondary'"
+                              th:attr="data-id=${reservation.id}"
+                              onclick="showStatusConfirmation(event, this.getAttribute('data-id'), 'REJECTED')">Deny</button>
+                    </div>
+
+
+
+                     <form th:action="@{/reservations/{reservationId}/changeStatus(reservationId=${reservation.id})}"
+                           method="post"
+                           style="display: none;"
+                           th:object="${reservation}"
+                           class="btn-group"
+                           th:id="'confirm-buttons-' + ${reservation.id}">
+
+                          <input type="hidden" name="status" class="status-input"/>
+
+                          <div class="table-dropdown mb-2" style="display: none;">
+                            <select class="form-select select-gray px-2 table-select"
+                                    name="tableId"
+                                    th:attr="onchange=|onTableSelectChange('${reservation.id}')|">
+                              <option value="">Choose table</option>
+                              <option th:each="table : ${reservation.seatingTime.event.layout.activeDiningTables}"
+                                      th:value="${table.id}"
+                                      th:text="'Table with ' + ${table.seats} + ' seats'">
+                              </option>
+                            </select>
+                          </div>
+
+                          <button type="submit"
+                                  class="btn btn-sm btn-success rounded-pill submit-btn"
+                                  data-status=""
+                                  disabled>Confirm</button>
+
+                          <button type="button"
+                                  class="btn btn-sm btn-secondary rounded-pill"
+                                  th:attr="data-id=${reservation.id}"
+                                  onclick="cancelStatusChange(event, this.getAttribute('data-id'))">Cancel</button>
+                        </form>
+
+
+                  </div>
+
+                  <div th:if="${reservation.status == 'APPROVED'}">
+                    <span class="badge rounded-pill text-bg-primary">Approved</span>
+                  </div>
+                </span>
+          </td>
+          <td>
+            <a th:href="@{/reservations/{id}(id=${reservation.id})}">View</a>
+          </td>
+
+
+        </tr>
+        </tbody>
+      </table>
+  </main>
+</div>
+</body>
+</html>
