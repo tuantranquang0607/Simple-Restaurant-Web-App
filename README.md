@@ -1,4 +1,4 @@
-# Personal-Bookstore-Project
+# Simple Restaurant Management Web Application
 
 One of my classmates and I made a simple restaurant web app using Spring Boot and Java EE.<br><br>
 
